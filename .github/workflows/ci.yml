@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
+        os: ['ubuntu-latest'] #, 'windows-latest', 'macos-latest'] # same error in other OS
     runs-on: ${{ matrix.os }} 
     steps:
       - uses: actions/checkout@v4

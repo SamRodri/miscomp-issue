@@ -25,7 +25,7 @@ mod android {
                 TEST_EVENT.notify(TestArgs::now());
 
                 task::deadline(1.secs()).await;
-                APP.exit()
+                APP.exit();
             });
         });
     }
