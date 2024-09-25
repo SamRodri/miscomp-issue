@@ -13,23 +13,21 @@ mod android {
         zng::app::print_tracing(tracing::Level::INFO);
         android::init_android_app(app.clone());
         run_same_process(|| {
-            APP.defaults().run_window(async { window().await });
+            APP.defaults().run(async {
+                test("app-start");
+
+                TEST_EVENT
+                    .on_pre_event(app_hn!(|_: &TestArgs, _| {
+                        // this fails (prints None)
+                        test("test-event");
+                    }))
+                    .perm();
+                TEST_EVENT.notify(TestArgs::now());
+
+                task::deadline(1.secs()).await;
+                APP.exit()
+            });
         });
-    }
-
-    pub async fn window() -> window::WindowRoot {
-        // this works (prints Some(_))
-        test("app-start");
-
-        TEST_EVENT
-            .on_pre_event(app_hn!(|_: &TestArgs, _| {
-                // this fails (prints None)
-                test("test-event");
-            }))
-            .perm();
-        TEST_EVENT.notify(TestArgs::now());
-
-        Window! {}
     }
 
     pub fn test(ctx: &str) {
