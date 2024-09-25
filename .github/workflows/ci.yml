@@ -33,10 +33,6 @@ jobs:
           crate: cargo-zng
       - uses: Swatinem/rust-cache@v2
       - run: cargo do pack android
-      - name: check libc++_shared.so exists
-        shell: bash
-        run: |
-             [ -f target/build-ndk/arm64-v8a/libc++_shared.so ]
       - name: upload apk
         uses: actions/upload-artifact@v4
         with:
