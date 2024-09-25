@@ -1,0 +1,25 @@
+{
+    // format Zng macros too
+    "rust-analyzer.rustfmt.overrideCommand": [
+        "cargo",
+        "zng",
+        "fmt",
+        "--stdin"
+    ],
+    "files.associations": {
+        "*.zr-sh": "shellscript",
+        "*.zr-shf": "shellscript",
+        "*.zr-copy": "ini",
+        "*.zr-glob": "ini",
+        "*.md.zr-rp": "markdown",
+        "*.xml.zr-rp": "xml",
+        "*.iss.zr-rp": "innosetup",
+        "*.plist.zr-rp": "plist",
+        "**/DEBIAN/control.zr-rp": "debian-control",
+        "**/usr/share/doc/*/copyright.zr-rp": "debian-copyright",
+    },
+    "lldb.launch.env": {
+        // "ZNG_NO_CRASH_HANDLER": "", // var used by zng::app::crash_handler
+        "MISCOMP_ISSUE_NO_CRASH_HANDLER": "" // var in the cli config style
+    }
+}

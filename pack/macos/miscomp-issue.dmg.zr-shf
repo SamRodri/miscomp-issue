@@ -1,0 +1,6 @@
+cd $ZR_TARGET_DD
+mkdir dmg-folder
+cp -R miscomp-issue.app dmg-folder/miscomp-issue.app
+hdiutil create temp.dmg -ov -volname "$ZR_APP" -fs HFS+ -srcfolder "dmg-folder"
+hdiutil convert temp.dmg -format UDZO -o miscomp-issue.dmg
+rm -r dmg-folder

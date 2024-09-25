@@ -1,0 +1,21 @@
+# strip symbols
+cd $ZR_TARGET_DD/miscomp-issue/usr/bin
+strip --strip-all -o miscomp-issue-tmp miscomp-issue
+rm miscomp-issue; mv miscomp-issue-tmp miscomp-issue
+cd $ZR_TARGET_DD
+
+# validate
+desktop-file-validate miscomp-issue/usr/share/applications/miscomp-issue.desktop
+
+# set chmod
+find miscomp-issue -type d -exec chmod 755 {} \;
+find miscomp-issue -type f -exec chmod 644 {} \;
+chmod 755 miscomp-issue/usr/bin/miscomp-issue
+
+# build
+dpkg-deb --root-owner-group --build miscomp-issue
+rm -r miscomp-issue
+
+# verify
+echo verifying package
+lintian --suppress-tags embedded-library miscomp-issue.deb
