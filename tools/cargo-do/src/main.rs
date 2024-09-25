@@ -270,7 +270,7 @@ fn build_ndk(args: Vec<String>) {
     );
     // LTO "fat" and "thin" have caused miscompilation for "aarch64-linux-android"
     // see https://github.com/zng-ui/zng/issues/488 for details.
-    cmd.env("CARGO_PROFILE_RELEASE_LTO", "false");
+    // cmd.env("CARGO_PROFILE_RELEASE_LTO", "false");
     let s = cmd.status().unwrap_or_die("cannot run cargo-ndk");
     if !s.success() {
         std::process::exit(s.code().unwrap_or(1));

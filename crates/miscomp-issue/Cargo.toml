@@ -5,8 +5,8 @@ edition = "2021"
 license = "TODO"
 [package.metadata.zng.about]
 app = "miscomp-issue"
-org = ""
-qualifier = ""
+org = "Zng Project"
+qualifier = "rs.zng"
 
 [dependencies]
 shared = { path = "../shared" }

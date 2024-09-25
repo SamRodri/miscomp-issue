@@ -3,6 +3,14 @@ use zng::prelude::*;
 pub async fn window() -> window::WindowRoot {
     // l10n-primary_win-### Primary Window
 
+    test();
+
+    zng::touch::TOUCH_INPUT_EVENT
+        .on_pre_event(app_hn!(|_: &zng::touch::TouchInputArgs, _| {
+            test();
+        }))
+        .perm();
+
     Window! {
         id = "primary-window";
         title = zng::env::about().app.clone();
@@ -45,4 +53,19 @@ fn content() -> impl UiNode {
             },
         ]
     }
+}
+
+pub fn test() {
+    use zng::layout::*;
+    // (Rect(3240pxx7200px at (-1080px, -2400px)), Rect(1080pxx90px at (0px, 0px))
+    let cull = std::hint::black_box(PxRect::new(
+        PxPoint::new(Px(-1080), Px(-2400)),
+        PxSize::new(Px(3240), Px(7200)),
+    ));
+    let bounds = std::hint::black_box(PxRect::new(
+        PxPoint::new(Px(0), Px(0)),
+        PxSize::new(Px(1080), Px(90)),
+    ));
+    let i = cull.intersection(&bounds);
+    println!("!!: {:?}", i);
 }
