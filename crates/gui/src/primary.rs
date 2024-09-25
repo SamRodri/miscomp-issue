@@ -1,15 +1,22 @@
-use zng::prelude::*;
+use zng::{
+    event::{event, event_args},
+    prelude::*,
+};
 
 pub async fn window() -> window::WindowRoot {
-    // l10n-primary_win-### Primary Window
+    // this works (prints Some(_))
+    test("app-start");
 
-    test();
-
-    zng::touch::TOUCH_INPUT_EVENT
-        .on_pre_event(app_hn!(|_: &zng::touch::TouchInputArgs, _| {
-            test();
+    TEST_EVENT
+        .on_pre_event(app_hn!(|_: &TestArgs, _| {
+            // this fails (prints None)
+            test("test-event");
         }))
         .perm();
+
+    // std::thread::spawn(|| {
+    // });
+    TEST_EVENT.notify(TestArgs::now());
 
     Window! {
         id = "primary-window";
@@ -55,7 +62,7 @@ fn content() -> impl UiNode {
     }
 }
 
-pub fn test() {
+pub fn test(ctx: &str) {
     use zng::layout::*;
     // (Rect(3240pxx7200px at (-1080px, -2400px)), Rect(1080pxx90px at (0px, 0px))
     let cull = std::hint::black_box(PxRect::new(
@@ -67,5 +74,17 @@ pub fn test() {
         PxSize::new(Px(1080), Px(90)),
     ));
     let i = cull.intersection(&bounds);
-    println!("!!: {:?}", i);
+    println!("!!: {ctx} {:?}", i);
+}
+
+event_args! {
+    pub struct TestArgs {
+        ..
+        fn delivery_list(&self, list: &mut UpdateDeliveryList) {
+            list.search_all();
+        }
+    }
+}
+event! {
+    static TEST_EVENT: TestArgs;
 }
