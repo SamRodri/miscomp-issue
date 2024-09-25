@@ -90,6 +90,8 @@ fn pack(args: Vec<String>) {
         &[
             "zng",
             "res",
+            "--metadata",
+            "crates/miscomp-issue-mobile/Cargo.toml",
             &format!("pack/{package}"),
             &format!("target/pack/{package}"),
             "--pack",

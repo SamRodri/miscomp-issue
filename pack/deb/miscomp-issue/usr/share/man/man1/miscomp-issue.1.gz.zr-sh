@@ -1,2 +1,0 @@
-help2man -n="$ZR_APP" -o "$ZR_TARGET_DD/miscomp-issue.1" target/release/miscomp-issue
-gzip -9 -n "$ZR_TARGET_DD/miscomp-issue.1"

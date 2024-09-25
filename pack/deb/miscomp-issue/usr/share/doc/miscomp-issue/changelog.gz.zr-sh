@@ -1,3 +1,0 @@
-TARGET="$ZR_TARGET_DD/changelog"
-cargo do pack deb --changelog > $TARGET
-gzip -9 -n $TARGET

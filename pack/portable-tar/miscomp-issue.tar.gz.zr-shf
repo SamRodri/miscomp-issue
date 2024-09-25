@@ -1,3 +1,0 @@
-cd $ZR_TARGET_DD
-tar -czf "miscomp-issue.tar.gz" "miscomp-issue"
-rm -r "miscomp-issue"

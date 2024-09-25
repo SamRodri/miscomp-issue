@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=${ZR_APP}
-Comment=${ZR_DESCRIPTION:?}
-Exec=/usr/bin/miscomp-issue
-Icon=miscomp-issue
-Terminal=false
-Type=Application
-Categories=Utility;
