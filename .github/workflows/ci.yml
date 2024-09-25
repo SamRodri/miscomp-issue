@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:  
-          targets: aarch64-linux-android, armv7-linux-androideabi
+          targets: aarch64-linux-android
       - name: install cargo-ndk
         uses: baptiste0928/cargo-install@v3
         with:
@@ -33,6 +33,10 @@ jobs:
           crate: cargo-zng
       - uses: Swatinem/rust-cache@v2
       - run: cargo do pack android
+      - name: check libc++_shared.so exists
+        shell: bash
+        run: |
+             [ -f target/build-ndk/arm64-v8a/libc++_shared.so ]
       - name: upload apk
         uses: actions/upload-artifact@v4
         with:
