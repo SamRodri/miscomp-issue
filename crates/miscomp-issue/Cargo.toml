@@ -1,5 +1,5 @@
 [package]
-name = "miscomp-issue-mobile"
+name = "miscomp-issue"
 version = "0.1.0"
 edition = "2021"
 license = "TODO"
@@ -8,12 +8,8 @@ app = "miscomp-issue"
 org = "Zng Project"
 qualifier = "rs.zng"
 
-[lib]
-# required by Android
-crate-type = ["cdylib"]
-
-[target.'cfg(any(target_os = "android", target_os = "ios"))'.dependencies]
-zng = { workspace = true, features = ["view", "android_native_activity"] }
+[dependencies]
+zng = { workspace = true, features = ["view"] }
 
 # log
 tracing.workspace = true

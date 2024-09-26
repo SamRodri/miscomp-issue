@@ -12,33 +12,17 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  pack-android:
+  run:
     strategy:
       fail-fast: false
       matrix:
-        os: ['ubuntu'] #, 'windows', 'macos'] # same error in other OS
+        os: ['macos'] # macos-latest uses aarch64, I think
         lto: ['fat'] # , 'thin', 'false'] # false fixes the error, thin fixes the test but not the original full project
     runs-on: ${{ matrix.os }}-latest 
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-        with:  
-          targets: aarch64-linux-android
-      - name: install cargo-ndk
-        uses: baptiste0928/cargo-install@v3
-        with:
-          crate: cargo-ndk
-      - name: install cargo-zng
-        uses: baptiste0928/cargo-install@v3
-        with:
-          crate: cargo-zng
       - uses: Swatinem/rust-cache@v2
-      - run: cargo do pack android
+      - run: cargo do run
         env:
           CARGO_PROFILE_RELEASE_LTO: ${{ matrix.lto }}
-      - name: upload apk
-        uses: actions/upload-artifact@v4
-        with:
-          name: miscomp-${{ matrix.os }}-${{ matrix.lto }}
-          path: target/pack/android/miscomp-issue.apk
-          if-no-files-found: error

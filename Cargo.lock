@@ -2562,7 +2562,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "miscomp-issue-mobile"
+name = "miscomp-issue"
 version = "0.1.0"
 dependencies = [
  "tracing",
