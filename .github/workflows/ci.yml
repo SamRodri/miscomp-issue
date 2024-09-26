@@ -42,3 +42,10 @@ jobs:
           name: miscomp-${{ matrix.os }}-${{ matrix.lto }}
           path: target/pack/android/miscomp-issue.apk
           if-no-files-found: error
+      - name: run apk
+        run: |
+            avdmanager create avd -n test_avd -k "system-images;android-30;google_apis;arm64"
+            emulator -avd test_avd
+            adb install target/pack/android/miscomp-issue.apk
+            adb shell am start -n miscomp-issue/NativeActivity
+            adb logcat | grep "miscomp-issue"
