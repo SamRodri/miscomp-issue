@@ -42,10 +42,23 @@ jobs:
           name: miscomp-${{ matrix.os }}-${{ matrix.lto }}
           path: target/pack/android/miscomp-issue.apk
           if-no-files-found: error
+
+      - name: Add avdmanager and sdkmanager to system PATH
+        run: |
+            echo "$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/${{ env.ANDROID_BUILD_TOOLS_VERSION }}" >> $GITHUB_PATH
+      - name: Install Sdk
+        run: |
+           yes Y | sdkmanager --licenses
+           sdkmanager --install ${ANDROID_SDK_PACKAGES}
+      - name: Build emulator
+        run: |
+            echo "no" | avdmanager --verbose create avd --force -n $EMULATOR_NAME --abi "${ANDROID_TARGET}/${ANDROID_ARCH}" -k "system-images;android-${API_LEVEL};${ANDROID_TARGET};${ANDROID_ARCH}"
+      - name: Launch emulator
+        run: |
+          chmod +x ./start_emu_headless.sh
+          EMULATOR_TIMEOUT=$EMULATOR_TIMEOUT EMULATOR_NAME=$EMULATOR_NAME ./start_emu_headless.sh
       - name: run apk
         run: |
-            avdmanager create avd -n test_avd -k "system-images;android-30;google_apis;arm64"
-            emulator -avd test_avd
             adb install target/pack/android/miscomp-issue.apk
             adb shell am start -n miscomp-issue/NativeActivity
             adb logcat | grep "miscomp-issue"
