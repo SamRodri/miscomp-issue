@@ -27,20 +27,6 @@ where
     cmd
 }
 
-pub trait ResultExt<T, E> {
-    fn unwrap_or_die(self, comment: &str) -> T;
-    fn ok_or_die(self, comment: &str);
-}
-impl<T, E: std::error::Error> ResultExt<T, E> for Result<T, E> {
-    fn unwrap_or_die(self, comment: &str) -> T {
-        self.unwrap_or_else(|e| die!("{comment}\n       {e}"))
-    }
-
-    fn ok_or_die(self, comment: &str) {
-        let _ = self.unwrap_or_die(comment);
-    }
-}
-
 #[allow(unused)]
 pub trait CmdOutputExt {
     /// Returns the stdout
