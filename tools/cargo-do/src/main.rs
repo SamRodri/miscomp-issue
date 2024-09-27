@@ -331,19 +331,17 @@ fn test_apk(_: Vec<String>) {
 
     for line in BufReader::new(log.stdout.unwrap()).lines() {
         let line = line.unwrap_or_die("cannot read logcat line");
-        if line.contains("miscomp") {
-            println!("{line}");
+        println!("{line}");
 
-            if let Some(i) = line.find("!!:") {
-                let line = line[i..].trim_start();
-                test_run += 1;
-                if test_run == 2 {
-                    if line.starts_with("None") {
-                        die!("miscompilation detected");
-                    } else {
-                        assert!(line.starts_with("Some("));
-                        std::process::exit(0);
-                    }
+        if let Some(i) = line.find("!!:") {
+            let line = line[i..].trim_start();
+            test_run += 1;
+            if test_run == 2 {
+                if line.starts_with("None") {
+                    die!("miscompilation detected");
+                } else {
+                    assert!(line.starts_with("Some("));
+                    std::process::exit(0);
                 }
             }
         }
