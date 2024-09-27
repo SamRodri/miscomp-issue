@@ -336,10 +336,10 @@ fn test_apk(_: Vec<String>) {
             let line = line[i..].trim_start();
             test_run += 1;
             if test_run == 2 {
-                if line.starts_with("None") {
+                if line.ends_with(" None") {
                     die!("miscompilation detected");
                 } else {
-                    assert!(line.starts_with("Some("));
+                    assert!(line.ends_with(" Some(Rect(1080pxx90px at (0px, 0px)))"));
                     std::process::exit(0);
                 }
             }
