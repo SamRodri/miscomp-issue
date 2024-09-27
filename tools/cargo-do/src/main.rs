@@ -331,9 +331,8 @@ fn test_apk(_: Vec<String>) {
 
     for line in BufReader::new(log.stdout.unwrap()).lines() {
         let line = line.unwrap_or_die("cannot read logcat line");
-        println!("{line}");
-
         if let Some(i) = line.find("!!:") {
+            println!("{line}");
             let line = line[i..].trim_start();
             test_run += 1;
             if test_run == 2 {
