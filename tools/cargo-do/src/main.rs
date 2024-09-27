@@ -4,7 +4,12 @@ mod util;
 mod pack_android;
 mod pack_deb;
 
-use std::path::Path;
+use std::{
+    io::{BufRead, BufReader},
+    path::Path,
+    process::Stdio,
+    time::Duration,
+};
 
 use util::*;
 
@@ -18,6 +23,7 @@ fn main() {
         "build-ndk" => build_ndk(args),
         "run-r" => run_r(args),
         "update" => update(args),
+        "test-apk" => test_apk(args),
         "help" | "--help" | "-h" | "" => help(args),
         _other => cmd("cargo", [arg_cmd].into_iter().chain(args))
             .status()
@@ -290,6 +296,54 @@ fn update(args: Vec<String>) {
     if args.is_empty() {
         // update l10n resources from external dependencies
         l10n(vec!["--no-local".to_owned(), "--no-pkg".to_owned()]);
+    }
+}
+
+/// do test-apk
+///    Called by ci.yml after Android setup
+fn test_apk(_: Vec<String>) {
+    let log = cmd("adb", &["logcat", "-b", "main"])
+        .stdout(Stdio::piped())
+        .spawn()
+        .unwrap_or_die("cannot read logcat");
+
+    cmd(
+        "adb",
+        &[
+            "shell",
+            "am",
+            "start",
+            "-n",
+            "rszng.zng_project.miscomp_issue_mobile/android.app.NativeActivity",
+        ],
+    )
+    .status()
+    .success_or_die("cannot run apk");
+
+    // we expect two logs "!!: Some(_)" and "!!: None" (the error).
+    let mut test_run = 0;
+    println!("analyzing logs..");
+
+    std::thread::spawn(|| {
+        std::thread::sleep(Duration::from_secs(20));
+        die!("timeout, no test print on log after 20s");
+    });
+
+    for line in BufReader::new(log.stdout.unwrap()).lines() {
+        let line = line.unwrap_or_die("cannot read logcat line");
+        if let Some(i) = line.find("!!:") {
+            println!("{line}");
+            let line = line[i..].trim_start();
+            test_run += 1;
+            if test_run == 2 {
+                if line.ends_with(" None") {
+                    die!("miscompilation detected");
+                } else {
+                    assert!(line.ends_with(" Some(Rect(1080pxx90px at (0px, 0px)))"));
+                    std::process::exit(0);
+                }
+            }
+        }
     }
 }
 
