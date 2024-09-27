@@ -74,4 +74,4 @@ jobs:
         run: |
             adb install target/pack/android/miscomp-issue.apk
             adb shell am start -W -n rszng.zng_project.miscomp_issue_mobile/android.app.NativeActivity
-            adb logcat | grep "miscomp-issue"
+            adb shell "logcat | grep miscomp-issue"
