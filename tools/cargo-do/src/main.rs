@@ -321,10 +321,11 @@ fn test_apk(_: Vec<String>) {
 
     // we expect two logs "!!: Some(_)" and "!!: None" (the error).
     let mut test_run = 0;
+    println!("analysing logs..");
     for line in BufReader::new(log.stdout.unwrap()).lines() {
         let line = line.unwrap_or_die("cannot read logcat line");
         if line.contains("miscomp") {
-            println!("{line}");
+            // println!("{line}");
 
             if let Some(i) = line.find("!!:") {
                 let line = line[i..].trim_start();
