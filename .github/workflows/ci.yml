@@ -73,5 +73,4 @@ jobs:
       - name: run apk
         run: |
             adb install target/pack/android/miscomp-issue.apk
-            adb shell am start -W -n rszng.zng_project.miscomp_issue_mobile/android.app.NativeActivity
-            timeout 5000 adb shell "logcat | grep miscomp_issue"
+            cargo do test-apk
