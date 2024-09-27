@@ -302,7 +302,7 @@ fn update(args: Vec<String>) {
 /// do test-apk
 ///    Called by ci.yml after Android setup
 fn test_apk(_: Vec<String>) {
-    let log = cmd("adb", &["logcat"])
+    let log = cmd("adb", &["logcat", "-b", "main"])
         .stdout(Stdio::piped())
         .spawn()
         .unwrap_or_die("cannot read logcat");
