@@ -7,6 +7,7 @@ mod pack_deb;
 use std::{
     io::{BufRead, BufReader},
     path::Path,
+    process::Stdio,
 };
 
 use util::*;
@@ -301,6 +302,7 @@ fn update(args: Vec<String>) {
 ///    Called by ci.yml after Android setup
 fn test_apk(_: Vec<String>) {
     let log = cmd("adb", &["shell", r#""logcat""#])
+        .stdout(Stdio::piped())
         .spawn()
         .unwrap_or_die("cannot read logcat");
 
