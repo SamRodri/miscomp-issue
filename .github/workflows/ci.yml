@@ -20,7 +20,7 @@ env:
   EMULATOR_NAME: nexus
 
 jobs:
-  pack-android:
+  t:
     strategy:
       fail-fast: false
       matrix:
