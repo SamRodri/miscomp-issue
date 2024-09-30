@@ -26,7 +26,7 @@ jobs:
       matrix:
         os: ['ubuntu'] #, 'windows', 'macos'] # same error in other OS
         lto: ['fat', 'thin', 'false'] # false fixes the error, thin fixes the test but not the original full project
-        toolchain: ['stable', 'nightly' ]
+        toolchain: ['stable', 'nightly', 'nightly-2024-08-06']
     runs-on: ${{ matrix.os }}-latest 
     steps:
       - uses: actions/checkout@v4
