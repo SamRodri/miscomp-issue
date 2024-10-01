@@ -351,8 +351,12 @@ fn test_apk(_: Vec<String>) {
         }
     }
 
-    if !status.success() && killed_anr {
-        die!("app killed (ANR), usually works on retry")
+    if !status.success() {
+        if killed_anr {
+            die!("app killed (ANR), usually works on retry")
+        } else {
+            die!("app exited with error code: {:?}", status.code());
+        }
     }
 }
 
