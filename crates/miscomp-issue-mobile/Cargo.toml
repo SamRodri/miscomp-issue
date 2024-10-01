@@ -14,6 +14,7 @@ crate-type = ["cdylib"]
 
 [target.'cfg(any(target_os = "android", target_os = "ios"))'.dependencies]
 zng = { workspace = true, features = ["view", "android_native_activity"] }
+pathfinder_simd = { version = "*", features = ["pf-no-simd"] } # fix nightly build
 
 # log
 tracing.workspace = true
