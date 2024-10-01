@@ -307,7 +307,7 @@ fn test_apk(_: Vec<String>) {
         .spawn()
         .unwrap_or_die("cannot read logcat");
 
-    cmd(
+    let status = cmd(
         "adb",
         &[
             "shell",
@@ -318,7 +318,7 @@ fn test_apk(_: Vec<String>) {
         ],
     )
     .status()
-    .success_or_die("cannot run apk");
+    .unwrap_or_die("cannot run apk");
 
     // we expect two logs "!!: Some(_)" and "!!: None" (the error).
     let mut test_run = 0;
@@ -328,6 +328,8 @@ fn test_apk(_: Vec<String>) {
         std::thread::sleep(Duration::from_secs(20));
         die!("timeout, no test print on log after 20s");
     });
+
+    let mut killed_anr = false;
 
     for line in BufReader::new(log.stdout.unwrap()).lines() {
         let line = line.unwrap_or_die("cannot read logcat line");
@@ -343,7 +345,14 @@ fn test_apk(_: Vec<String>) {
                     std::process::exit(0);
                 }
             }
+        } else if line.ends_with("reacting to signal 3") {
+            println!("{line}");
+            killed_anr = true;
         }
+    }
+
+    if !status.success() && killed_anr {
+        die!("app killed (ANR), usually works on retry")
     }
 }
 
