@@ -272,7 +272,7 @@ fn build_ndk(args: Vec<String>) {
     cmd.env(
         "RUSTFLAGS",
         format!(
-            "{} -Clink-arg=-z -Clink-arg=nostart-stop-gc",
+            "{} -Clink-arg=-z -Clink-arg=nostart-stop-gc -C codegen-units=1",
             std::env::var("RUSTFLAGS").unwrap_or_default()
         ),
     );
